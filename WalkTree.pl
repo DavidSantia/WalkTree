@@ -5,33 +5,28 @@ use Data::Dumper;
 use Spreadsheet::WriteExcel;
 
 my $simple = XML::Simple->new(); 
-my $tree = $simple->XMLin('./Sample.xml',KeyAttr=>{
-Campaigns=>'Campaign' 
-} );
+my $tree = $simple->XMLin('./sample.xml');
 
-
-my $workbook = Spreadsheet::WriteExcel->new('./Sample.xls');
+my $workbook = Spreadsheet::WriteExcel->new('./sample.xls');
 $worksheet = $workbook->add_worksheet();
 
-my $i =2;
-#print $i ."\n";
-#print "AdvertiserId" . "\t\t" ."AdvertiserName" ."\t\t" . "CampaignId" ."\t\t". "CampaignName" ."\n";
-#print Dumper ($Campaign);
+my $row = 2;
 
-$worksheet->write("A1","AdvertiserId");
-$worksheet->write("B1","AdvertiserName");
-$worksheet->write("C1","CampaignId");
-$worksheet->write("D1","CampaignName");
+$worksheet->write("A1","Common");
+$worksheet->write("B1","Botanical");
+$worksheet->write("C1","Zone");
+$worksheet->write("D1","Light");
+$worksheet->write("E1","Price");
+$worksheet->write("F1","Availability");
 
+foreach  my $p (@{$tree->{plant}}){
 
-foreach  my $n (@{$tree->{Campaigns}->{Campaign}}){
+    $worksheet->write("A${row}",$p->{common});
+    $worksheet->write("B${row}",$p->{botanical});
+    $worksheet->write("C${row}",$p->{zone});
+    $worksheet->write("D${row}",$p->{light});
+    $worksheet->write("E${row}",$p->{price});
+    $worksheet->write("F${row}",$p->{availability});
 
-
-$worksheet->write("A${i}",$n->{AdvertiserId});
-$worksheet->write("B${i}",$n->{AdvertiserName});
-$worksheet->write("C${i}",$n->{CampaignId});
-$worksheet->write("D${i}",$n->{CampaignName});
-
-$i++;
-
+    $row++;
 };
